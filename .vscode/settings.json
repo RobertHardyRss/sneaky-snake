@@ -1,0 +1,10 @@
+{
+	"editor.formatOnSave": true,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"prettier.useTabs": true,
+	"prettier.tabWidth": 4,
+	"editor.guides.bracketPairs": true,
+	"editor.linkedEditing": true,
+	"prettier.bracketSameLine": true,
+	"liveServer.settings.port": 5501
+}
