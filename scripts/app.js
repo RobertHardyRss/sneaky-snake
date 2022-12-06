@@ -114,7 +114,56 @@ class Segment {
 	}
 }
 
+// Food notes
+// Should obey our grid restrictions
+// when you run into your snake grows - randomize these
+// 		red food + 1 segment
+//		blue food + 2 segments
+//		gold food + 3 segments
+// start with circles
+// spawn in random grid
+// 		within the boundaries of the grid
+//		only spawn on empty grid spots
+// How many food spawn?
+//  	Make it configurable?
+//		At least 2
+
+class Food {
+	/**
+	 * @param {CanvasRenderingContext2D} ctx
+	 */
+	constructor(ctx) {
+		this.ctx = ctx;
+		this.x = 0;
+		this.y = 0;
+		this.radius = game.gridSize / 2;
+		this.color = "red";
+		this.growBy = 1;
+		this.isEaten = false;
+	}
+
+	update() {}
+
+	draw() {
+		this.ctx.beginPath();
+		this.ctx.fillStyle = this.color;
+		this.ctx.arc(
+			this.x + this.radius,
+			this.y + this.radius,
+			this.radius,
+			0,
+			Math.PI * 2
+		);
+		this.ctx.closePath();
+	}
+}
+
+// Other Things we can run into  - Ideas
+// Bomb
+// Makes your faster
+
 let p1 = new Player(5 * game.gridSize, 5 * game.gridSize, ctx, game);
+let f1 = new Food(ctx);
 
 let currentTime = 0;
 
@@ -125,6 +174,8 @@ function gameLoop(timestamp) {
 
 	p1.update(elapsedTime);
 	p1.draw();
+
+	f1.draw();
 
 	requestAnimationFrame(gameLoop);
 }
