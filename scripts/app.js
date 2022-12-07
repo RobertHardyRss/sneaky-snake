@@ -120,9 +120,9 @@ class Segment {
 // 		red food + 1 segment
 //		blue food + 2 segments
 //		gold food + 3 segments
-// start with circles
+// x start with circles
 // spawn in random grid
-// 		within the boundaries of the grid
+// 		* within the boundaries of the grid
 //		only spawn on empty grid spots
 // How many food spawn?
 //  	Make it configurable?
@@ -142,9 +142,41 @@ class Food {
 		this.isEaten = false;
 	}
 
+	spawn() {
+		// reset eaten state
+		this.isEaten = false;
+
+		let foodType = Math.floor(Math.random() * 3 + 1);
+		switch (foodType) {
+			case 1:
+				this.color = "red";
+				this.growBy = 1;
+				break;
+			case 2:
+				this.color = "blue";
+				this.growBy = 2;
+				break;
+			case 3:
+				this.color = "gold";
+				this.growBy = 3;
+				break;
+		}
+
+		let xGridMaxValue = canvas.width / game.gridSize;
+		let yGridMaxValue = canvas.height / game.gridSize;
+
+		let randomX = Math.floor(Math.random() * xGridMaxValue);
+		let randomY = Math.floor(Math.random() * yGridMaxValue);
+
+		this.x = randomX * game.gridSize;
+		this.y = randomY * game.gridSize;
+	}
+
 	update() {}
 
 	draw() {
+		if (this.isEaten) return;
+
 		this.ctx.beginPath();
 		this.ctx.fillStyle = this.color;
 		this.ctx.arc(
@@ -154,6 +186,7 @@ class Food {
 			0,
 			Math.PI * 2
 		);
+		this.ctx.fill();
 		this.ctx.closePath();
 	}
 }
@@ -163,7 +196,15 @@ class Food {
 // Makes your faster
 
 let p1 = new Player(5 * game.gridSize, 5 * game.gridSize, ctx, game);
-let f1 = new Food(ctx);
+
+let food = [new Food(ctx), new Food(ctx), new Food(ctx), new Food(ctx)];
+
+food.forEach((f) => {
+	f.spawn();
+});
+
+// let f1 = new Food(ctx);
+// f1.spawn();
 
 let currentTime = 0;
 
@@ -175,7 +216,9 @@ function gameLoop(timestamp) {
 	p1.update(elapsedTime);
 	p1.draw();
 
-	f1.draw();
+	food.forEach((f) => {
+		f.draw();
+	});
 
 	requestAnimationFrame(gameLoop);
 }
