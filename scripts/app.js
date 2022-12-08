@@ -32,6 +32,7 @@ class Player {
 		this.currentDirection = MOVE_DOWN;
 		this.head = new Segment(this.x, this.y, "yellow", this.ctx);
 		this.segments = [];
+		this.
 
 		this.lastUpdate = 0;
 		this.wireUpEvents();
@@ -88,6 +89,12 @@ class Player {
 			}
 		});
 	}
+
+	grow(growBy) {
+		for (let i = 0; i < growBy; i++) {
+			this.segments.push(new Segment(this.x, this.y, "lime", this.ctx));
+		}
+	}
 }
 
 class Segment {
@@ -139,7 +146,7 @@ class Food {
 		this.radius = game.gridSize / 2;
 		this.color = "red";
 		this.growBy = 1;
-		this.isEaten = false;
+		this.isEaten = true;
 	}
 
 	spawn() {
@@ -199,12 +206,20 @@ let p1 = new Player(5 * game.gridSize, 5 * game.gridSize, ctx, game);
 
 let food = [new Food(ctx), new Food(ctx), new Food(ctx), new Food(ctx)];
 
-food.forEach((f) => {
-	f.spawn();
-});
-
-// let f1 = new Food(ctx);
-// f1.spawn();
+/**
+ * @param {Array<Player>} players
+ * @param {Array<Food>} food
+ */
+function checkIfFoodIsConsumed(players, food) {
+	food.forEach((f) => {
+		players.forEach((p) => {
+			if (p.x == f.x && p.y == f.y) {
+				// food is eaten
+				f.isEaten = true;
+			}
+		});
+	});
+}
 
 let currentTime = 0;
 
@@ -218,6 +233,12 @@ function gameLoop(timestamp) {
 
 	food.forEach((f) => {
 		f.draw();
+	});
+
+	// filter out uneaten food, and then respawn food
+	// that has been eaten
+	food.filter((f) => f.isEaten).forEach((f) => {
+		f.spawn();
 	});
 
 	requestAnimationFrame(gameLoop);
