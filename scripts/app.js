@@ -13,7 +13,7 @@ const MOVE_RIGHT = "right";
 
 let game = {
 	gridSize: 20,
-	refreshRate: 500, // milliseconds
+	refreshRate: 100, // milliseconds
 };
 
 class Player {
@@ -31,8 +31,9 @@ class Player {
 
 		this.currentDirection = MOVE_DOWN;
 		this.head = new Segment(this.x, this.y, "yellow", this.ctx);
+		/** @type {Array<Segment>} */
 		this.segments = [];
-		this.
+		this.sneakCount = 0;
 
 		this.lastUpdate = 0;
 		this.wireUpEvents();
@@ -44,8 +45,17 @@ class Player {
 	update(elapsedTime) {
 		this.lastUpdate += elapsedTime;
 		if (this.lastUpdate < this.game.refreshRate) return;
-
 		this.lastUpdate = 0;
+
+		for (let i = this.segments.length - 1; i >= 1; i--) {
+			this.segments[i].x = this.segments[i - 1].x;
+			this.segments[i].y = this.segments[i - 1].y;
+		}
+
+		if (this.segments.length > 0) {
+			this.segments[0].x = this.head.x;
+			this.segments[0].y = this.head.y;
+		}
 
 		switch (this.currentDirection) {
 			case MOVE_DOWN:
@@ -92,8 +102,11 @@ class Player {
 
 	grow(growBy) {
 		for (let i = 0; i < growBy; i++) {
-			this.segments.push(new Segment(this.x, this.y, "lime", this.ctx));
+			this.segments.push(
+				new Segment(this.head.x, this.head.y, "lime", this.ctx)
+			);
 		}
+		this.sneakCount++;
 	}
 }
 
@@ -213,9 +226,12 @@ let food = [new Food(ctx), new Food(ctx), new Food(ctx), new Food(ctx)];
 function checkIfFoodIsConsumed(players, food) {
 	food.forEach((f) => {
 		players.forEach((p) => {
-			if (p.x == f.x && p.y == f.y) {
+			//
+			if (p.head.x == f.x && p.head.y == f.y) {
+				console.log("food is eaten");
 				// food is eaten
 				f.isEaten = true;
+				p.grow(f.growBy);
 			}
 		});
 	});
@@ -234,6 +250,8 @@ function gameLoop(timestamp) {
 	food.forEach((f) => {
 		f.draw();
 	});
+
+	checkIfFoodIsConsumed([p1], food);
 
 	// filter out uneaten food, and then respawn food
 	// that has been eaten
