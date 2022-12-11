@@ -16,6 +16,12 @@ let game = {
 	refreshRate: 100, // milliseconds
 };
 
+// player todos
+// we need to loose 
+//      when we hit wall
+// 		when we hit ourselves
+//		when we hit another player
+
 class Player {
 	/**
 	 * @param {number} x
@@ -134,19 +140,11 @@ class Segment {
 	}
 }
 
-// Food notes
-// Should obey our grid restrictions
-// when you run into your snake grows - randomize these
-// 		red food + 1 segment
-//		blue food + 2 segments
-//		gold food + 3 segments
-// x start with circles
+// Food Todos
 // spawn in random grid
-// 		* within the boundaries of the grid
 //		only spawn on empty grid spots
 // How many food spawn?
 //  	Make it configurable?
-//		At least 2
 
 class Food {
 	/**
