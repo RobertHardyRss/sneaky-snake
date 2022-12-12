@@ -11,16 +11,25 @@ const MOVE_DOWN = "down";
 const MOVE_LEFT = "left";
 const MOVE_RIGHT = "right";
 
+// TODO: For Game
+//		We need start game screen where we say if it's 1 or 2 players
+//			instructions on how to play
+//		We need game over with play again
+//			2 player end conditions
+//			Final scoring is based on body length
+//		Player sneak attempt counts on screen
 let game = {
 	gridSize: 20,
 	refreshRate: 100, // milliseconds
 };
 
 // player todos
-// we need to loose
-//      when we hit wall
-// 		when we hit ourselves
+// we need to lose
 //		when we hit another player
+// Figure out how to reverse
+//		HEad and tail change positions
+//		Sort our segments
+//		Only works if you have sneak attempts
 
 class Player {
 	/**
@@ -159,6 +168,7 @@ class Segment {
 //		only spawn on empty grid spots
 // How many food spawn?
 //  	Make it configurable?
+// Change the odds of getting sneak attempts and gold/blue food
 
 class Food {
 	/**
