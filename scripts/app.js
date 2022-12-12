@@ -17,7 +17,7 @@ let game = {
 };
 
 // player todos
-// we need to loose 
+// we need to loose
 //      when we hit wall
 // 		when we hit ourselves
 //		when we hit another player
@@ -40,6 +40,7 @@ class Player {
 		/** @type {Array<Segment>} */
 		this.segments = [];
 		this.sneakCount = 0;
+		this.isDead = false;
 
 		this.lastUpdate = 0;
 		this.wireUpEvents();
@@ -77,9 +78,22 @@ class Player {
 				this.head.x -= this.game.gridSize;
 				break;
 		}
+
+		// check for death
+		if (
+			this.head.x < 0 ||
+			this.head.y < 0 ||
+			this.head.x >= canvas.width ||
+			this.head.y >= canvas.height ||
+			this.segments.some((s) => s.x == this.head.x && s.y == this.head.y)
+		) {
+			this.isDead = true;
+		}
 	}
 
 	draw() {
+		// if(this.isDead) return;
+
 		this.head.draw();
 		this.segments.forEach((s) => {
 			s.draw();
@@ -256,6 +270,13 @@ function gameLoop(timestamp) {
 	food.filter((f) => f.isEaten).forEach((f) => {
 		f.spawn();
 	});
+
+	let isGameOver = [p1].some((p) => p.isDead);
+
+	if (isGameOver) {
+		// do something crazy
+		return;
+	}
 
 	requestAnimationFrame(gameLoop);
 }
