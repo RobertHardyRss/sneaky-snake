@@ -92,22 +92,28 @@ class Player {
 
 		if (this.isReverseMove()) {
 			// check if reverse is available
-			if (this.sneakCount > 0) 
-			{
+			if (this.sneakCount > 0) {
 				// valid reversaL
 				this.currentDirection = this.requestedDirection;
 				this.sneakCount--;
 				// figure out reversal
 
-				// reverse sort our body segments
-				let reverseSegments  = [];
-				for(let i = this.segments.length - 1; i == 0; i--) {
-					reverseSegments.push(this.segments[i]);
-				}
-				this.segments = reverseSegments;
+				let headX = this.head.x;
+				let headY = this.head.y;
 
-				// flip head and tail positions
-				
+				/** @type {Segment} */
+				//@ts-ignore
+				let tail = this.segments.pop();
+
+				this.segments = this.segments.reverse();
+
+				this.head.x = tail.x;
+				this.head.y = tail.y;
+
+				tail.x = headX;
+				tail.y = headY;
+
+				this.segments.push(tail);
 			}
 		} else {
 			this.currentDirection = this.requestedDirection;
