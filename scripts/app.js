@@ -300,6 +300,8 @@ class Food {
 			if (isOverlapping == false) {
 				tryCount = MAX_TRIES;
 			} else {
+				randomX = Math.floor(Math.random() * xGridMaxValue);
+				randomY = Math.floor(Math.random() * yGridMaxValue);
 				tryCount++;
 			}
 		} while (tryCount < MAX_TRIES);
